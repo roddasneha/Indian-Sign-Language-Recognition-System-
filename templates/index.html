@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language Converter</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        .btn {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 40px;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            margin: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: block;
+            width: 100%;
+        }
+        .btn:hover {
+            background: #388E3C;
+            transform: scale(1.05);
+        }
+        .loader-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        /* CSS Spinner */
+        .spinner {
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top: 6px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Indian Sign Language Recognition System</h1>
+        <button class="btn" onclick="startLoading('/run_isl_to_audio', true)">Sign Language to Audio/Text</button>
+        <button class="btn" onclick="startLoading('/run_audio_to_isl', false)">Audio to Sign Language</button>
+        
+        <!-- Loading Spinner (Only for ISL to Audio) -->
+        <div id="loader-container" class="loader-container">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <script>
+        function startLoading(url, showLoader) {
+            if (showLoader) {
+                // Only show loader for "Sign Language to Audio/Text"
+                document.getElementById('loader-container').style.display = 'flex';
+            }
+
+            // Send AJAX request to start the script
+            fetch(url)
+            .then(response => response.json())
+            .then(() => {
+                if (showLoader) {
+                    // Hide loader after 3 seconds (ensuring script has started)
+                    setTimeout(() => {
+                        document.getElementById('loader-container').style.display = 'none';
+                    }, 6000);
+                }
+            })
+            .catch(() => {
+                if (showLoader) {
+                    document.getElementById('loader-container').style.display = 'none'; // Hide loader on error
+                }
+            });
+        }
+    </script>
+</body>
+</html>
